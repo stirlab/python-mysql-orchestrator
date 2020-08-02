@@ -1,0 +1,5 @@
+orchestrator:
+  host: localhost
+  port: 3000
+  username: api
+  password: 8e1e9404-7424-4585
