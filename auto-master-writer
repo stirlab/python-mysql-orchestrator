@@ -14,11 +14,11 @@ class AutoUpdater(Orchestrator):
         self.checks = 0
         self.check_result = None
         try:
-            self.auto_update_check_threshold = self.config['master_auto_update' ]['check_threshold']
+            self.auto_update_check_threshold = self.config['auto_master_writer' ]['check_threshold']
         except KeyError:
             self.auto_update_check_threshold = MASTER_AUTO_UPDATE_CHECK_THRESHOLD_DEFAULT
         try:
-            self.auto_update_interval_seconds = self.config['master_auto_update' ]['interval_seconds']
+            self.auto_update_interval_seconds = self.config['auto_master_writer' ]['interval_seconds']
         except KeyError:
             self.auto_update_interval_seconds = MASTER_AUTO_UPDATE_INTERVAL_SECONDS_DEFAULT
 
