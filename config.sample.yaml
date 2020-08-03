@@ -1,12 +1,19 @@
+# Info for connecting to the orchestrator API.
+# All attributes required.
 orchestrator:
   host: localhost
   port: 3000
   username: api
-  password: 8e1e9404-7424-4585
+  password: apiusersecret
 
+# Defaults if none provided on command line.
 defaults:
-  cluster: apartmentlines
+  cluster: mycluster
 
-master_auto_update:
-  checks: 3
+# These are particular to the auto-master-writer.py script.
+auto_master_writer:
+  # Number of checks that have to occur in the same state before the master is
+  # automatically set as a writer.
+  check_threshold: 3
+  # Number of seconds between checks.
   interval_seconds: 5
