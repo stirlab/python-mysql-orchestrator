@@ -6,3 +6,7 @@ orchestrator:
 
 defaults:
   cluster: apartmentlines
+
+master_auto_update:
+  checks: 3
+  interval_seconds: 5
