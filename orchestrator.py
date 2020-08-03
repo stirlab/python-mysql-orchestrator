@@ -13,20 +13,22 @@ DEFAULT_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 DEFAULT_CONFIG_FILE = "%s/config.yaml" % DEFAULT_SCRIPT_DIR
 DEFAULT_API_ENDPOINT = "clusters"
 
-class Manager(object):
+class Orchestrator(object):
 
     def __init__(self, config_file=None, args={}):
         self.config = self.parse_config(config_file or DEFAULT_CONFIG_FILE)
         self.config.update(args)
         self.defaults = self.config['defaults']
-        self.quiet = 'quiet' in self.config
-        self.debug = 'debug' in self.config
+        self.quiet = 'quiet' in self.config and self.config['quiet']
+        self.debug = 'debug' in self.config and self.config['debug']
         self.logger = logging.getLogger(self.__class__.__name__)
         self.log_level = self.logger.level
         if self.quiet:
             self.enable_quiet()
         if self.debug:
             self.enable_debug()
+            self.logger.debug('Config:')
+            pp.pprint(self.config)
 
     def default_loglevel(self):
         self.logger.setLevel(self.log_level)
