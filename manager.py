@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import argparse
 import yaml
 import requests
 import logging
@@ -19,6 +18,7 @@ class Manager(object):
     def __init__(self, config_file=None, args={}):
         self.config = self.parse_config(config_file or DEFAULT_CONFIG_FILE)
         self.config.update(args)
+        self.defaults = self.config['defaults']
         self.quiet = 'quiet' in self.config
         self.debug = 'debug' in self.config
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -74,6 +74,11 @@ class Manager(object):
         self.logger.debug("Setting %s:%d writable" % (hostname, port))
         return self.instance_action('set-writeable', hostname, port)
 
+    def get_cluster_master(self, cluster=None):
+        cluster = cluster or self.defaults['cluster']
+        return self.get('master/%s' % cluster)
+
+
     def instance_action(self, path, hostname, port=3306):
         data = self.get('%s/%s/%d' % (path, hostname, port))
         if data:
@@ -81,20 +86,3 @@ class Manager(object):
             self.logger.debug("Instance action message: %s" % message)
             return success
         return False
-
-
-def main():
-    parser = argparse.ArgumentParser(description="Manage nftables sets")
-    parser.add_argument("--debug", action='store_true', help="Enable debugging")
-    parser.add_argument("--quiet", action='store_true', help="Silence output except for errors")
-    parser.add_argument("--config-file", type=str, metavar="FILE", default=DEFAULT_CONFIG_FILE, help="Configuration filepath, default: %s" % DEFAULT_CONFIG_FILE)
-    parser.add_argument("-p", "--path", type=str, metavar="PATH", default=DEFAULT_API_ENDPOINT, help="API endpoint, default: %s" % DEFAULT_API_ENDPOINT)
-    #parser.add_argument("--berserk", action='store_true', help="Add all berserker_ips config to the resolver")
-    #parser.add_argument("--sets", action='store', metavar="SET", type=str, nargs='+', help="Sets to update. Default is to update all sets in the configuration file")
-    args = vars(parser.parse_args())
-    config_file = args.pop('config_file')
-    manager = Manager(config_file, args)
-    manager.get(args['path'])
-
-if __name__ == "__main__":
-    main()
