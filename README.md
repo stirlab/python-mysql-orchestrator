@@ -21,7 +21,7 @@ This humble library provides the following:
 
  * Copy ```config.sample.yaml``` to ```config.yaml```
  * Edit to taste
- * Execute ```orchestrator-run.py``` with no arguments for help.
+ * Execute ```orchestrator-run.py --help``` for help.
 
 # Using/extending the base class
 
