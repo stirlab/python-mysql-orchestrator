@@ -10,9 +10,9 @@ MySQL Orchestrator has a robust
 
 This humble library provides the following:
 
- * A base Orchestrator class
+ * A base ```Orchestrator``` class
  * ```orchestrator-run.py```: Wraps the base class for calling from CLI
- * ```auto-master-writer```: Detects a healthy cluster with a master that has
+ * ```auto-master-writer.py```: Detects a healthy cluster with a master that has
    ```read_only = true```, and sets ```read_only = false``` (this allows
    configuring all cluster nodes to start in read-only mode, and still provide
    an automated way to set the master as writeable.
