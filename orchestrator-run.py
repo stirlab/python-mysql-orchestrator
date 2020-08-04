@@ -2,6 +2,9 @@
 
 import argparse
 from orchestrator import Orchestrator, DEFAULT_CONFIG_FILE, DEFAULT_API_ENDPOINT
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
 
 def main():
     parser = argparse.ArgumentParser(description="Run orchestrator API commands from CLI")
@@ -12,7 +15,10 @@ def main():
     args = vars(parser.parse_args())
     config_file = args.pop('config_file')
     orchestrator = Orchestrator(config_file, args)
-    orchestrator.get(args['path'])
+    path = args['path'] or orchestrator.config['path']
+    print("Executing API command: %s" % path)
+    data = orchestrator.get(path)
+    pp.pprint(data)
 
 if __name__ == "__main__":
     main()
