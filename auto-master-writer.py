@@ -22,6 +22,18 @@ class AutoUpdater(Orchestrator):
         except KeyError:
             self.auto_update_interval_seconds = MASTER_AUTO_UPDATE_INTERVAL_SECONDS_DEFAULT
 
+    def set_instance_read_only(self, hostname, port=3306):
+        self.logger.debug("Setting %s:%d writable" % (hostname, port))
+        return self.instance_action('set-read-only', hostname, port)
+
+    def set_instance_writeable(self, hostname, port=3306):
+        self.logger.debug("Setting %s:%d writable" % (hostname, port))
+        return self.instance_action('set-writeable', hostname, port)
+
+    def get_cluster_master(self, cluster=None):
+        cluster = cluster or self.defaults['cluster']
+        return self.get('master/%s' % cluster)
+
     def master_needs_update(self, data):
         # Master info.
         hostname_info = data['Key']
@@ -99,6 +111,7 @@ def main():
     parser.add_argument("--debug", action='store_true', help="Enable debugging")
     parser.add_argument("--quiet", action='store_true', help="Silence output except for errors")
     parser.add_argument("--config-file", type=str, metavar="FILE", default=DEFAULT_CONFIG_FILE, help="Configuration filepath, default: %s" % DEFAULT_CONFIG_FILE)
+    parser.add_argument("-c", "--cluster", type=str, metavar="ALIAS", help="Cluster to monitor")
     args = vars(parser.parse_args())
     config_file = args.pop('config_file')
     auto_updater = AutoUpdater(config_file, args)

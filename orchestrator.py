@@ -68,19 +68,6 @@ class Orchestrator(object):
             self.logger.error('Error occurred: %s' % err)
             return False
 
-    def set_instance_read_only(self, hostname, port=3306):
-        self.logger.debug("Setting %s:%d writable" % (hostname, port))
-        return self.instance_action('set-read-only', hostname, port)
-
-    def set_instance_writeable(self, hostname, port=3306):
-        self.logger.debug("Setting %s:%d writable" % (hostname, port))
-        return self.instance_action('set-writeable', hostname, port)
-
-    def get_cluster_master(self, cluster=None):
-        cluster = cluster or self.defaults['cluster']
-        return self.get('master/%s' % cluster)
-
-
     def instance_action(self, path, hostname, port=3306):
         data = self.get('%s/%s/%d' % (path, hostname, port))
         if data:
