@@ -37,7 +37,7 @@ class Orchestrator(object):
         self.logger.setLevel(logging.DEBUG)
 
     def enable_quiet(self):
-        self.logger.setLevel(logging.CRITICAL)
+        self.logger.setLevel(logging.ERROR)
 
     def parse_config(self, config_file):
         with open(config_file, 'r') as stream:
