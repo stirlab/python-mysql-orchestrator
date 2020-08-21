@@ -37,7 +37,7 @@ class Orchestrator(object):
         self.logger.setLevel(logging.DEBUG)
 
     def enable_quiet(self):
-        self.logger.setLevel(logging.ERROR)
+        self.logger.setLevel(logging.CRITICAL)
 
     def parse_config(self, config_file):
         with open(config_file, 'r') as stream:
@@ -51,9 +51,17 @@ class Orchestrator(object):
         path = path or self.config['path']
         return "http://%s:%s/api/%s" % (self.config['orchestrator']['host'], self.config['orchestrator']['port'], path)
 
+    def response_ok (self, data):
+        return 'Code' in data and data['Code'] == 'OK' or False
+
+    def response_get_message(self, data):
+        return 'Message' in data and data['Message'] or ''
+
+    def response_get_details(self, data):
+        return 'Details' in data and data['Details'] or {}
+
     def parse_action_response(self, data):
-        success = data['Code'] == 'OK'
-        return success, data['Message']
+        return self.response_ok(data), self.response_get_message(data)
 
     def get(self, path):
         self.logger.debug("Retrieving JSON data from : %s" % path)
