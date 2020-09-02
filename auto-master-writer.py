@@ -47,9 +47,10 @@ class AutoUpdater(Orchestrator):
         problems = len(data['Problems']) > 0
         read_only = data['ReadOnly']
         # Slave info.
+        has_slaves = len(data['SlaveHosts']) > 0
         slave_hosts = ', '.join([ "%s:%d" % (info['Hostname'], info['Port']) for info in data['SlaveHosts'] ])
 
-        needs_update = up_to_date and last_check_valid and recently_checked and not downtimed and not problems and read_only
+        needs_update = up_to_date and last_check_valid and recently_checked and not downtimed and not problems and read_only and has_slaves
 
         self.logger.debug("IsUpToDate: %s" % up_to_date)
         self.logger.debug("IsLastCheckValid: %s" % last_check_valid)
@@ -57,6 +58,7 @@ class AutoUpdater(Orchestrator):
         self.logger.debug("IsDowntimed: %s" % downtimed)
         self.logger.debug("Problems: %s" % problems)
         self.logger.debug("ReadOnly: %s" % read_only)
+        self.logger.debug("Has slaves: %s" % has_slaves)
         self.logger.debug("SlaveHosts: %s" % slave_hosts)
         self.logger.debug("Needs update: %s" % needs_update)
         return needs_update, hostname, port, slave_hosts
